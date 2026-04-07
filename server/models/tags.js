@@ -1,0 +1,17 @@
+ const mongoose = require('mongoose');
+ const Course = require('./Course');
+const tagsSchema=new mongoose.Schema({
+    name: {
+        type: String,
+        required: true  
+    },
+    description: {  
+        type: String,
+    },
+    course:{
+        // jis bhi course ka tag hai uska id in reference
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course"
+    }
+})
+module.exports = mongoose.model("Tag", tagsSchema);
