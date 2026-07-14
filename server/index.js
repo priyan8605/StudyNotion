@@ -1,4 +1,6 @@
 const path = require('path');
+
+
 const dotenv=require('dotenv')
 require('dotenv').config({ path: path.join(__dirname, '.env') })
 // require('dotenv').config() is a line of code used in Node.js applications to load environment variables from a .env file into process.env.

@@ -90,7 +90,7 @@ function Navbar() {
                         <div className="absolute left-[50%] top-0 -z-10 h-6 w-6 translate-x-[80%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
                         {loading || !subLinks ? (
                           <p className="text-center">Loading...</p>
-                        ) : subLinks.length ? (
+                        ) : (subLinks || []).length ? (
                           <>
                             {subLinks
                               ?.filter(
@@ -185,7 +185,7 @@ function Navbar() {
                     Log In
                   </div>
                 </Link>
-              )}is 
+              )}
 
               {token === null && (
                 <Link to={"/signup"} onClick={() => setIsMenuModalOpen(false)}>
@@ -271,7 +271,7 @@ function Navbar() {
                   </summary>
 
                   <div className="px-4 text-black-100 ">
-                    {subLinks.length ? (
+                    {(subLinks || []).length ? (
                       <div className="flex flex-col capitalize">
                         {subLinks.map((subLink, index) => (
                           <Link

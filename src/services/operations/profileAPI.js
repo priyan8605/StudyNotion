@@ -14,11 +14,19 @@ const {
   GET_INSTRUCTOR_DATA_API,
 } = profileEndpoints
 
+// (profileAPI.js) This is a Redux Thunk function
+// SIMPLE: It returns a function that receives dispatch, allowing async operations
+// DETAILED: A Thunk is a function that returns another function
+// Thunk structure: (args) => async (dispatch) => { ...can dispatch multiple actions... }
+// This allows handling of async operations (API calls) in Redux without side effects in components
 export function getUserDetails(token, navigate) {
+  // Returns: (dispatch) => { async code here }
+  // Redux Thunk middleware will call this returned function with dispatch as parameter
   return async (dispatch) => {
     const toastId = toast.loading("Loading...") 
-    dispatch(setLoading(true))
+    dispatch(setLoading(true))  // Tell Redux to set loading = true (slice action from profileSlice)
     try {
+      // Step 1: Make async API call to get user data from backend
       const response = await apiConnector("GET", GET_USER_DETAILS_API, null, {
         Authorization: `Bearer ${token}`,
       })
@@ -30,14 +38,17 @@ export function getUserDetails(token, navigate) {
       const userImage = response.data.data.image
         ? response.data.data.image
         : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.data.firstName} ${response.data.data.lastName}`
+      // Step 2: Send user data to Redux store via setUser (slice action from profileSlice)
+      // This updates the Redux state with user details
       dispatch(setUser({ ...response.data.data, image: userImage }))
     } catch (error) {
+      // Step 3: Handle errors - logout user and show error toast
       dispatch(logout(navigate))
       console.log("GET_USER_DETAILS API ERROR............", error)
       toast.error("Could Not Get User Details")
     }
     toast.dismiss(toastId)
-    dispatch(setLoading(false))
+    dispatch(setLoading(false))  // Tell Redux to set loading = false
   }
 }
 

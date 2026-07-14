@@ -4,6 +4,11 @@ import Navbar from './components/Common/Navbar';
 import {Route,Routes, useNavigate} from 'react-router-dom';
 import PrivateRoute from './components/core/Auth/PrivateRoute';
 import { useEffect } from "react"
+// NOTE (App.js): getUserDetails is imported from profileAPI.js
+// It's a Redux Thunk - a special function that Redux can handle
+// DETAILED: A Thunk is a function that returns another function: (token, navigate) => async (dispatch) => {}
+// When you dispatch(getUserDetails(token, navigate)), Redux Thunk middleware intercepts it
+// and calls it with dispatch as an argument, allowing you to make async API calls and dispatch multiple slice actions
 import { getUserDetails } from "./services/operations/profileAPI"
 
 // Pages
@@ -52,6 +57,12 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const token = JSON.parse(localStorage.getItem("token"))
+      // (App.js) dispatch(getUserDetails()) -> Thunk in profileAPI.js handles the API call
+      // The Thunk will dispatch setLoading and setUser internally
+      // DETAILED: Dispatching a Thunk means dispatch() receives a function instead of a plain action object
+      // getUserDetails(token, navigate) returns: async (dispatch) => { ... }
+      // Redux Thunk middleware intercepts this and calls it with dispatch as argument
+      // Inside the thunk, it makes API call and dispatches setLoading(true/false), setUser(data)
       dispatch(getUserDetails(token, navigate))
     }
 
