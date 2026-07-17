@@ -10,7 +10,8 @@
 
 #secret
 .env
-
+.env.local
+node_modules/
 # production
 /build
 

@@ -137,6 +137,17 @@ exports.getAllUserDetails=async(req,res)=>{
 
         // 1>fetch id of user from request
         const id=req.user.id;
+//         Auth.js controller defines id in the JWT payload as user._id during login
+// const payload = {
+//   email: user.email,
+//   id: user._id,
+//   accountType: user.accountType,
+// }
+// That payload is signed into the JWT:
+
+// const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn:'24h' });
+// Auth.js middleware auth() of verifies the token and sets req.user = decode
+// after that, any route using req.user.id gets the user ID from the decoded token payload
         // 2>perform validation
         const userDetails=await User.findById(id).populate('additionalDetails').exec();
         // populate('additionalDetails') ki wajah se User ke additionalDetails me sirf Profile ka id nhi blki Profile ka actual document dikhega

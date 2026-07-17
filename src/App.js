@@ -53,17 +53,18 @@ function App() {
     const user = useSelector((state) => state.profile.user);
   const progress = useSelector((state) => state.loadingBar);
   const dispatch = useDispatch();
+  // JSON.parse() is a built‑in JavaScript method that takes a JSON‑formatted string and converts it into a JavaScript object.
   
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      const token = JSON.parse(localStorage.getItem("token"))
+      const token = JSON.parse(localStorage.getItem("token"));
       // (App.js) dispatch(getUserDetails()) -> Thunk in profileAPI.js handles the API call
-      // The Thunk will dispatch setLoading and setUser internally
+      // The Thunk will dispatch setLoading and setUser internally 
       // DETAILED: Dispatching a Thunk means dispatch() receives a function instead of a plain action object
       // getUserDetails(token, navigate) returns: async (dispatch) => { ... }
       // Redux Thunk middleware intercepts this and calls it with dispatch as argument
       // Inside the thunk, it makes API call and dispatches setLoading(true/false), setUser(data)
-      dispatch(getUserDetails(token, navigate))
+      dispatch(getUserDetails(token, navigate));
     }
 
   }, [])

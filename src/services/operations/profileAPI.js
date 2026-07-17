@@ -19,13 +19,17 @@ const {
 // DETAILED: A Thunk is a function that returns another function
 // Thunk structure: (args) => async (dispatch) => { ...can dispatch multiple actions... }
 // This allows handling of async operations (API calls) in Redux without side effects in components
-export function getUserDetails(token, navigate) {
+export function getUserDetails(token, navigate) 
+{
   // Returns: (dispatch) => { async code here }
   // Redux Thunk middleware will call this returned function with dispatch as parameter
   return async (dispatch) => {
     const toastId = toast.loading("Loading...") 
-    dispatch(setLoading(true))  // Tell Redux to set loading = true (slice action from profileSlice)
-    try {
+
+    dispatch(setLoading(true)) // Tell Redux to set loading = true (slice action from profileSlice)
+
+    try 
+    {
       // Step 1: Make async API call to get user data from backend
       const response = await apiConnector("GET", GET_USER_DETAILS_API, null, {
         Authorization: `Bearer ${token}`,
