@@ -30,6 +30,17 @@ import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 
 
 function Navbar() {
+//   How it works
+// index.js wraps the app with Redux <Provider store={store}>
+// store is created with configureStore({ reducer: rootReducer })
+// index.js combines reducers:
+// auth: authReducer
+// profile: profileReducer
+// cart: cartReducer
+// That works because:
+// useSelector reads from the Redux store
+// state.auth already exists from the combined reducer
+// no direct auth import is needed in the component
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
   const { totalItems } = useSelector((state) => state.cart);
@@ -88,6 +99,7 @@ function Navbar() {
                       <BsChevronDown />
                       <div className="invisible absolute left-[50%] top-[50%] z-[1000] flex w-[200px] translate-x-[-50%] translate-y-[3em] flex-col rounded-lg bg-richblack-5 p-4 text-richblack-900 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px]">
                         <div className="absolute left-[50%] top-0 -z-10 h-6 w-6 translate-x-[80%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
+                      
                         {loading || !subLinks ? (
                           <p className="text-center">Loading...</p>
                         ) : (subLinks || []).length ? (
@@ -101,7 +113,12 @@ function Navbar() {
                                   to={`/catalog/${subLink.name
                                     .split(" ")
                                     .join("-")
-                                    .toLowerCase()}`}
+                                    // subLink.name (e.g "Web Dev")is a string and if there is any space so we will split based 
+                                    // on space in array of substring (i.e ["Web","Dev"]) now with the help of join('-') we will join the
+                                    // element of array with "-" (i.e. "Web-Dev")
+                                    .toLowerCase()
+                                    // "Web-Dev" coverted to "web-dev"
+                                  }`}
                                   className="rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50"
                                   key={i}
                                 >
@@ -136,7 +153,18 @@ function Navbar() {
         </nav>
         {/* Login / Signup / Dashboard */}
         <div className="hidden items-center gap-x-4 md:flex">
-          {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+          {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && 
+//          In Navbar.jsx, the component reads:
+// const { user } = useSelector((state) => state.profile);
+// so user?.accountType means “look at the current user stored in the profile slice.”
+// That user is populated in authAPI.jsx during login:
+// dispatch(setUser({ ...response.data.user, image: userImage }))
+// The response.data.user object comes from the backend login response, and that user object includes accountType.
+
+// The selected role is originally captured in SignupForm.jsx as accountType and sent to the backend during signup.
+
+// So in short: user?.accountType is not created in the navbar itself; it comes from the authenticated user data stored in Redux after login.
+          (
             <Link to="/dashboard/cart" className="relative">
               <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
               {totalItems > 0 && (

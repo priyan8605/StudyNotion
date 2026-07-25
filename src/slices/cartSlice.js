@@ -28,14 +28,30 @@ const cartSlice= createSlice({
     name:"cart",
     initialState:initialState,
     reducers:{
-        setTotalItems(state,value){
-            state.token=value.payload;
-        },
+        // setTotalItems(state,value){
+        //     state.token=value.payload;
+        // },
 
         // function for add to cart
     addToCart: (state, action) => {
       const course = action.payload
+    //   state.course=action.payload is not done as we don't want course as property but instated as object so state will have array of course object
+    // In addToCart, the payload is expected to be a course object.
+// So const course = action.payload is just a convenient way to store that object in a variable and then use it as:
+// state.cart.push(course)
+// state.totalItems++
+// state.total += course.price
+// If you wrote state.course = action.payload, you would only be saving the payload into a new property named course on the slice state. That would not add the course to the cart list.
       const index = state.cart.findIndex((item) => item._id === course._id)
+    //   state.cart is an array of cart items
+// each item in that array is a course object
+// course is the new course being added
+// findIndex(...) searches the array for the first element where:
+
+// item._id is equal to course._id
+// Result
+// If a matching course is found, index becomes its position in the array
+// If no match is found, index becomes -1
 
       if (index >= 0) {
         // If the course is already in the cart, do not modify the quantity
