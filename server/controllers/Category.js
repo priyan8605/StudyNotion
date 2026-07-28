@@ -82,7 +82,7 @@ exports.showAllCategory = async (req, res) => {
     // Return all categories (including those without published courses)
     res.status(200).json({
       success: true,
-      data: allCategories,
+      data: allCategories,//allCategories is having array of  category as we are using find()
     });  // to show all category including those category  jisme published course nhi hai
 
     // Return only categories that have at least one published course
@@ -155,9 +155,12 @@ exports.categoryPageDetails = async (req, res) => {
       })
       .exec();
     const allCourses = allCategories.flatMap((category) => category.courses);
+    // const mostSellingCourses = allCourses
+    //   .sort((a, b) => b.sold - a.sold)
+    //   .slice(0, 10);
     const mostSellingCourses = allCourses
-      .sort((a, b) => b.sold - a.sold)
-      .slice(0, 10);
+  .sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)
+  .slice(0, 10);
 
     res.status(200).json({
       success: true,

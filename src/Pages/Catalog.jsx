@@ -49,6 +49,15 @@ function Catalog() {
       ;(async () => {
         try {
           const res = await getCatalogPageData(categoryId)
+          // {
+//   success: true,
+//   data: {
+//     selectedCategory: { ... },
+//     differentCategory: { ... },
+//     mostSellingCourses: [ ... ]
+//   }
+// }
+// here it's not res.data.data because getCatalogPageData() is returning result that is already result=res.data
           setCatalogPageData(res)
         } catch (error) {
           console.log(error)

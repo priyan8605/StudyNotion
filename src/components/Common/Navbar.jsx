@@ -164,6 +164,10 @@ function Navbar() {
 // The selected role is originally captured in SignupForm.jsx as accountType and sent to the backend during signup.
 
 // So in short: user?.accountType is not created in the navbar itself; it comes from the authenticated user data stored in Redux after login.
+// On signup, the controller receives accountType from the request body in Auth.js controller.
+// That value is stored in the database through the User schema field defined in User.js model, where it is allowed to be one of Admin, Student, or Instructor.
+// On login, the backend fetches the user from MongoDB by email, then reads the saved value from user.accountType.
+// It places that value into the JWT payload as accountType:user.accountType in Auth.js controller, and also sends it back in the response as part of user.
           (
             <Link to="/dashboard/cart" className="relative">
               <AiOutlineShoppingCart className="text-2xl text-richblack-100" />

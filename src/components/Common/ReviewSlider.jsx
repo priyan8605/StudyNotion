@@ -18,7 +18,24 @@ function ReviewSlider() {
     const fetchReviews = async () => {
       try {
         const { data } = await apiConnector("GET", ratingsEndpoints.REVIEWS_DETAILS_API);
-        if (data?.success) {
+        // apiConnector(...) returns something like:
+// {
+//   data: {
+//     success: true,
+//     data: [...]
+//   }
+// }
+// So:
+// data (the outer one) = the response payload object
+// data.data (the inner one) = the actual reviews array inside that payload
+// That means:
+// setReviews(data?.data)
+// is basically:
+
+// “take the data field from the API response object”
+// and use that as the reviews list”
+// So the second data is not coming from somewhere new; it is the property name inside the API response object.   
+     if (data?.success) {
           setReviews(data?.data);
         }
       } catch (error) {
