@@ -38,7 +38,9 @@ export async function BuyCourse(token, courses, userDetails, navigate, dispatch)
 
         //initiate the order
         const orderResponse = await apiConnector("POST", COURSE_PAYMENT_API, 
-                                {courses},
+                                {courses}//this courses is the array of courses that user wants to buy and it's passed as parameter in 
+                                // BuyCourse() in courseDetails.js file, we are sending it to backend to create the order
+                                ,
                                 {
                                     Authorization: `Bearer ${token}`,
                                 })
@@ -54,8 +56,13 @@ export async function BuyCourse(token, courses, userDetails, navigate, dispatch)
             key: process.env.REACT_APP_RAZORPAY_KEY,
             // 
             currency: orderResponse.data.data.currency,
+
+            // understand orderResponse.data={
+//   success: true,
+//   data: paymentResponse
+// }
             amount: `${orderResponse.data.data.amount}`,
-            order_id:orderResponse.data.data.id,
+            order_id:orderResponse.data.data.id,//razorpay order id is generated automatically by razorpay when we create the order
             name:"StudyNotion",
             description: "Thank You for Purchasing the Course",
             image:rzpLogo,
@@ -63,7 +70,8 @@ export async function BuyCourse(token, courses, userDetails, navigate, dispatch)
                 name:`${userDetails.firstName}`,
                 email:userDetails.email
             },
-            handler: function(response) {
+            handler: function(response) //here response is implicitly defined by razorpay 
+            {
                 //send successful wala mail
                 sendPaymentSuccessEmail(response, orderResponse.data.data.amount,token );
                 //verifyPayment
@@ -90,9 +98,12 @@ export async function BuyCourse(token, courses, userDetails, navigate, dispatch)
 async function sendPaymentSuccessEmail(response, amount, token) {
     try{
         await apiConnector("POST", SEND_PAYMENT_SUCCESS_EMAIL_API, {
-            orderId: response.razorpay_order_id,
-            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,// returned by Razorpay after payment success in response object
+            paymentId: response.razorpay_payment_id,// returned by Razorpay after payment success in response object
             amount,
+
+            // note: order_id in BuyCourse() that is defined by us for the order before checkout is different from razorpay_order_id 
+            // that is returned by Razorpay after payment success in response object 
         },{
             Authorization: `Bearer ${token}`
         })

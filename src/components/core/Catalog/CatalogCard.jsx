@@ -8,7 +8,7 @@ function Course_Card({ course, Height }) {
 
   const [avgReviewCount, setAvgReviewCount] = useState(0)
   useEffect(() => {
-    const count = GetAvgRating(course.ratingAndReviews)
+    const count = GetAvgRating(course.ratingsAndReviews)
     setAvgReviewCount(count)
   }, [course])
 
@@ -33,7 +33,7 @@ function Course_Card({ course, Height }) {
               <span className="text-yellow-5">{avgReviewCount || 0}</span>
               <RatingStars Review_Count={avgReviewCount} />
               <span className="text-richblack-400">
-                {course?.ratingAndReviews?.length} Ratings
+                {course?.ratingsAndReviews?.length} Ratings
               </span>
             </div>
             <p className="text-xl text-richblack-5">Rs. {course?.price}</p>
@@ -43,5 +43,8 @@ function Course_Card({ course, Height }) {
     </>
   )
 }
-
+// for mostSellingCourses we are not populating firstName,lastName,ratingsAndReview but still it shows on ui 
+// const allCourses = allCategories.flatMap((category) => category.courses); in controller
+//  So mostSellingCourses is built from those course objects, and each course already 
+// has the populated instructor data.
 export default Course_Card

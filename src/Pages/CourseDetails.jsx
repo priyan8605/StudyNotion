@@ -26,6 +26,14 @@ function CourseDetails() {
 
 
   const { courseId } = useParams()
+  // useParams() is a React Router hook.
+// It returns an object containing all the dynamic parameters from the current URL.
+
+// For example, if your route is defined like: <Route path="/course/:courseId" element={<CoursePage />} />
+// And the current URL is /course/12345, then useParams() will return: { courseId: "12345" }
+// Instead of writing: const params = useParams()
+// const courseId = params.courseId
+
 
 
 // state for storing course details response from backend
@@ -60,7 +68,6 @@ function CourseDetails() {
 
   const [isActive, setIsActive] = useState(Array(0))
   const handleActive = (id) => {
-
     setIsActive(
       !isActive.includes(id)
         ? isActive.concat([id])

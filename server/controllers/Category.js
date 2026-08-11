@@ -115,7 +115,10 @@ exports.categoryPageDetails = async (req, res) => {
       .populate({
         path: "courses",
         match: { status: "Published" },
-        populate: "ratingsAndReviews",
+        populate: [
+          { path: "ratingsAndReviews" },
+          { path: "instructor", select: "firstName lastName" },
+        ],
       })
       .exec();
 
@@ -144,6 +147,11 @@ exports.categoryPageDetails = async (req, res) => {
       .populate({
         path: "courses",
         match: { status: "Published" },
+        populate: [
+          // an array is used because we are populating more than one property i.e. ratingsAndReviews and instructor
+          { path: "ratingsAndReviews" },
+          { path: "instructor", select: "firstName lastName" },
+        ],
       })
       .exec();
     console.log();
@@ -152,12 +160,16 @@ exports.categoryPageDetails = async (req, res) => {
       .populate({
         path: "courses",
         match: { status: "Published" },
+        populate: [
+          { path: "ratingsAndReviews" },
+          { path: "instructor", select: "firstName lastName" },
+        ],
       })
       .exec();
     const allCourses = allCategories.flatMap((category) => category.courses);
     // const mostSellingCourses = allCourses
     //   .sort((a, b) => b.sold - a.sold)
-    //   .slice(0, 10);
+    //   .slice(0, 10); sold is not defined 
     const mostSellingCourses = allCourses
   .sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)
   .slice(0, 10);
